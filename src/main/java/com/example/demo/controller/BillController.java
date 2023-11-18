@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.domin.Accounts;
 import com.example.demo.domin.Bills;
 import com.example.demo.received.BillsReceive;
+import com.example.demo.received.*;
 import com.example.demo.result.Result;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.BillsService;
@@ -41,15 +42,17 @@ public class BillController {
         return Result.success(bills);
     }
     @RequestMapping("/withdraw_money")
-    public Result<Float> withdrawMoney(HttpServletRequest request,int bid, String accountNumber,boolean flag, int type){
-        Accounts accounts = accountService.getAccountBynumber(accountNumber);
-        float money = billsService.withdrawMoney(accounts.getAcId(),bid,type,flag);
+    public Result<Float> withdrawMoney(HttpServletRequest request, @RequestBody WithdrawBody withdrawBody){
+
+        Accounts accounts = accountService.getAccountBynumber(withdrawBody.getAccountNumber());
+        float money = billsService.withdrawMoney(accounts.getAcId(),withdrawBody.getBid(), withdrawBody.getType(), withdrawBody.isFlag());
         return Result.success(money);
     }
     @RequestMapping("/withdraw_moneyList")
-    public Result<Float> withdrawMoneyList(HttpServletRequest request,ArrayList<Integer> bids, String accountNumber,boolean flag, int type){
-        Accounts accounts = accountService.getAccountBynumber(accountNumber);
-        float money = billsService.withdrawAllMoney(accounts.getAcId(),bids,type,flag);
+    public Result<Float> withdrawMoneyList(HttpServletRequest request,@RequestBody WithdrawBodyList withdrawBodyList){
+        Accounts accounts = accountService.getAccountBynumber(withdrawBodyList.getAccountNumber());
+        float money = billsService.withdrawAllMoney(accounts.getAcId(),withdrawBodyList.getBid(),
+                withdrawBodyList.getType(), withdrawBodyList.isFlag());
         return Result.success(money);
     }
 

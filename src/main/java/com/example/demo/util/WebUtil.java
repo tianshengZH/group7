@@ -1,5 +1,7 @@
 package com.example.demo.util;
 
+import com.example.demo.domin.Users;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,8 +9,8 @@ import javax.servlet.http.HttpSession;
 
 public class WebUtil {
     //session
-    public void addUserIdToSession(HttpSession session, String userId) {
-        session.setAttribute("userId", userId);
+    public void addUserToSession(HttpSession session, Users users) {
+        session.setAttribute("user", users);
     }
     //cookie
     public void addUserIdToCookie(HttpServletResponse response, String userId) {
