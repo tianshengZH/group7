@@ -41,10 +41,7 @@ public class BillsService {
         return true;
     }
     public ArrayList<Bills> getAllBillsByPid(BillsReceive billsReceive){
-        if(billsReceive.getUid() == 0){
-            Users users = userService.getByEmail(billsReceive.getEmail());
-            billsReceive.setUid(users.getUserid());
-        }
+
         if(billsReceive.getPid() ==0){
             Sellers sellers = sellersDao.getSellerByName(billsReceive.getUid(),billsReceive.getpName());
             billsReceive.setPid(sellers.getpId());

@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domin.*;
 import com.example.demo.result.*;
-
+import com.example.demo.util.*;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 @RestController
@@ -20,6 +21,8 @@ public class AccountController {
     AccountService accountService;
     @Autowired
     BillsService billsService;
+    @Autowired
+    LoginController loginController;
     @RequestMapping("/show_account_money")
     @ResponseBody
     public Result<Accounts> showAccountMoney(String accountNumber){
@@ -30,24 +33,38 @@ public class AccountController {
 
     @RequestMapping("/bind_account")
     @ResponseBody
-    public Result<Boolean> bindAccount(@RequestBody BindBody bindBody){
+    public Result<Boolean> bindAccount(HttpServletRequest request, @RequestBody BindBody bindBody){
+
+        WebUtil webUtil = new WebUtil();
+        int uid =Integer.parseInt(webUtil.getUserIdFromCookies(request));
+        bindBody.setUserId(uid);
         accountService.bindAccount(bindBody);
         return Result.success(true);
     }
     @RequestMapping("/update_account")
     @ResponseBody
-    public Result<Boolean> updateAccount(@RequestBody BindBody bindBody){
+    public Result<Boolean> updateAccount(HttpServletRequest request, @RequestBody BindBody bindBody){
+        WebUtil webUtil = new WebUtil();
+        int uid =Integer.parseInt(webUtil.getUserIdFromCookies(request));
+        bindBody.setUserId(uid);
+
         accountService.updateAccount(bindBody);
         return Result.success(true);
     }
     @RequestMapping("/delete_account")
     @ResponseBody
-    public Result<Boolean> deleteAccount(@RequestBody BindBody bindBody){
+    public Result<Boolean> deleteAccount(HttpServletRequest request, @RequestBody BindBody bindBody){
+        WebUtil webUtil = new WebUtil();
+        int uid =Integer.parseInt(webUtil.getUserIdFromCookies(request));
+        bindBody.setUserId(uid);
         accountService.deleteAccount(bindBody);
         return Result.success(true);
     }
     @RequestMapping("/get_accounts")
-    public Result<ArrayList<Accounts>> getAccounts(@RequestBody BindBody bindBody){
+    public Result<ArrayList<Accounts>> getAccounts(HttpServletRequest request,@RequestBody BindBody bindBody){
+        WebUtil webUtil = new WebUtil();
+        int uid =Integer.parseInt(webUtil.getUserIdFromCookies(request));
+        bindBody.setUserId(uid);
         ArrayList<Accounts> accounts =accountService.getAllAccounts(bindBody);
         return Result.success(accounts);
     }
