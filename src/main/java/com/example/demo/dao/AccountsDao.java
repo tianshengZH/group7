@@ -19,11 +19,13 @@ public interface AccountsDao {
     public Accounts getOneAccount(@Param("userId") int userId,@Param("accountNumber") String accountNumber,
                                   @Param("acType") int acType);
     @Update("update accounts set accountNumber = #{newNumber} where userid = #{userId} and accountNumber =#{oldNumber}")
-    public Accounts updateAccountNumber(BindBody bindBody);
+    public void updateAccountNumber(BindBody bindBody);
     @Update("update accounts set actype = #{acType} where userid = #{userId} and accountNumber =#{oldNumber}")
-    public Accounts updateAccountType(BindBody bindBody);
+    public void updateAccountType(BindBody bindBody);
     @Update("update accounts set RMBIncome = #{income} where acid =#{acid}")
     public void withdrawRMB(@Param("acid")int acid,@Param("income") float income);
     @Update("update accounts set DollarIncome = #{income} where acid =#{acid}")
     public void withdrawDollar(@Param("acid")int acid,@Param("income") float income);
+    @Select("select * from accounts where userid=#{userid} and actype = #{actype}")
+    public Accounts getAccountByUserAndType(@Param("userid") int userid,@Param("actype")int actype);
 }

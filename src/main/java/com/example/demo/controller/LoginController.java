@@ -22,11 +22,11 @@ public class LoginController {
     @RequestMapping("/login")
     @ResponseBody
     public Result<Boolean> login(HttpServletResponse response,@RequestBody Login login){
-        System.out.println(login.getPasswords());
+
         boolean flag = loginService.login(login);
         WebUtil webUtil= new WebUtil();
         if(flag){
-            //
+
             Users users = userService.getByEmail(login.getEmail());
 
             webUtil.addUserIdToCookie(response,String.valueOf(users.getUserid()));

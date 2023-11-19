@@ -42,11 +42,7 @@ public class SellerService {
         return true;
     }
     public boolean updateSellerName(BindSellerBody bindSellerBody){
-        if(bindSellerBody.getUserId() == 0){
-            Users users = userService.getByEmail(bindSellerBody.getEmail());
-            bindSellerBody.setUserId(users.getUserid());
 
-        }
         sellersDao.updateSellerName(bindSellerBody);
         return true;
     }
@@ -58,14 +54,12 @@ public class SellerService {
         }
         return sellersDao.getSellerByName(bindSellerBody.getUserId(),bindSellerBody.getNewName());
     }
+    public  int getPidByName(int uid,String name){
+        return sellersDao.getPidByName(uid,name);
+    }
+    public ArrayList<Sellers> getAllSellers(int id){
 
-    public ArrayList<Sellers> getAllSellers(BindSellerBody bindSellerBody){
-        if(bindSellerBody.getUserId() == 0){
-            Users users = userService.getByEmail(bindSellerBody.getEmail());
-            bindSellerBody.setUserId(users.getUserid());
-
-        }
-        return sellersDao.getAllSellersById(bindSellerBody.getUserId());
+        return sellersDao.getAllSellersById(id);
     }
 
 }

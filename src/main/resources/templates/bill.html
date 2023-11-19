@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Index</title>
+</head>
+<body>
+<h1>Bill Page</h1>
+<button onclick="showAddBillForm()">添加账单</button>
+
+<!-- 隐藏的添加账单表单 -->
+<div id="addBillForm" style="display:none;">
+    <form id="newBillForm">
+        <label for="income">Income:</label>
+        <input type="text" id="income" name="income">
+        <br>
+        <button type="submit">提交</button>
+    </form>
+</div>
+
+<table id="billsTable">
+    <tr>
+        <th>Bill_Id</th>
+        <th>Income</th>
+        <th>Status</th>
+        <th>Select</th>
+    </tr>
+    <!-- 表格行将被动态添加 -->
+</table>
+<select id="typeSelect">
+    <option value=0>人民币</option>
+    <option value=1>美元</option>
+</select>
+
+<select id="flagSelect">
+    <option value="true">提现</option>
+    <option value="false">试算</option>
+</select>
+<button onclick="submitSelectedBills()">提交选中账单</button>
+<script>
+    function submitSelectedBills() {
+        var selectedBills = [];
+        document.querySelectorAll('.billCheckbox:checked').forEach(function(checkbox) {
+            selectedBills.push(checkbox.value);
+        });
+        var type = document.getElementById('typeSelect').value;
+        var flag = document.getElementById('flagSelect').value;
+        console.log(JSON.stringify({
+            bid: selectedBills,
+            type:type,
+            flag:flag
+        }));
+        fetch('/bills/withdraw_moneyList', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                bid: selectedBills,
+                type:type,
+                flag:flag
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 处理响应
+                var time = 2000;
+                alert("手续费: " + data.data.commission);
+                //alert("试算金额: " + data.data.money);
+                console.log(flag);
+                if(flag == 'false') {
+                    alert("试算金额: " + data.data.money);
+                    time = 5000;
+                }
+                // 2秒后刷新页面
+                setTimeout(function() {
+                    window.location.reload();
+                }, time);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        // 解析URL参数
+
+        // 调用后端接口
+        fetch('/bills/get_bills?pName='+'test1')
+            .then(response => response.json())
+            .then(data => {
+                // 处理返回的数据
+                var billsTable = document.getElementById('billsTable');
+                data.data.forEach(function(bill) {
+                    var row = billsTable.insertRow();
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+
+                    cell1.innerHTML = bill.bId;
+                    cell2.innerHTML = bill.dollarIncome;
+                    cell3.innerHTML = bill.billStatus==0?"未提现":"已提现";
+                    var cell4 = row.insertCell(3);
+                    cell4.innerHTML = '<input type="checkbox" class="billCheckbox" value="' + bill.bId + '">';
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    });
+    function showAddBillForm() {
+        document.getElementById('addBillForm').style.display = 'block';
+    }
+
+    // 处理表单提交
+    document.getElementById('newBillForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var income = document.getElementById('income').value;
+
+        // 调用后端接口
+        fetch('/bills/add_bills', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                dollarIncome: income,
+                pName : "test1"
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 处理响应
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+</body>
+</html>

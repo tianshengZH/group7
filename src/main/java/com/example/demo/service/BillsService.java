@@ -40,13 +40,10 @@ public class BillsService {
         billsDao.insertBills(billsReceive.getPid(),billsReceive.getDollarIncome());
         return true;
     }
-    public ArrayList<Bills> getAllBillsByPid(BillsReceive billsReceive){
+    public ArrayList<Bills> getAllBillsByPid(int pid){
 
-        if(billsReceive.getPid() ==0){
-            Sellers sellers = sellersDao.getSellerByName(billsReceive.getUid(),billsReceive.getpName());
-            billsReceive.setPid(sellers.getpId());
-        }
-        return billsDao.getAllBills(billsReceive.getPid());
+
+        return billsDao.getAllBills(pid);
     }
 
     public float withdrawAllMoney(int accountId,ArrayList<Integer> bids,int types,boolean flag){
@@ -63,24 +60,27 @@ public class BillsService {
 
         return total;
     }
-    public float showCommission(int bid,int type){
-        Bills bills = billsDao.getBills(bid);
+    public float showCommission(ArrayList<Integer> bids,int type){
+        float sum = 0;
+        for(int bid : bids) {
+            Bills bills = billsDao.getBills(bid);
 
             if (bills == null) {
-                return 0;
+                continue;
             }
-            if (type != bills.getBillStatus()) {
-                return 0;
-            }
-            if (type == 0) {
-                return bills.getDollarIncome() * 7 * COMMISSION;
-            }
-            return bills.getDollarIncome() * COMMISSION;
 
+            if (type == 0) {
+                sum+= bills.getDollarIncome() * 7 * COMMISSION;
+            }else{
+                sum+= bills.getDollarIncome() * COMMISSION;
+            }
+
+        }
+        return sum;
     }
     public float withdrawMoney(int accountId,int bid,int type,boolean flag){
         //type == 0 ,人民币提现， type == 1 美元提现
-        //提现， 1. 找到对应账单的金额 2,在一个事务中 账户入钱 , 账单状态改变
+        //提现， 1. 找到对应账单 2,在一个事务中 账户入钱 , 账单状态改变
         Bills bills = billsDao.getBills(bid);
         if(bills == null){
             return 0;

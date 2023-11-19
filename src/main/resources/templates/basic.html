@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+<div>
+  <h2>User Information</h2>
+  <p>用户名</p>
+  <p th:text="${user.userName}">User Name</p>
+  <!-- 更多用户信息 -->
+
+</div>
+
+<div>
+  <h2>Account Information</h2>
+  <button onclick="showModal()">Add Account</button>
+  <table>
+    <tr>
+      <th>用户账号</th>
+      <th>账号类型</th>
+      <th>修改<th>
+      <th>收入</th>
+    </tr>
+
+
+    <tr th:each="account : ${accounts}">
+
+      <td th:text="${account.accountNumber}" >账号</td>
+
+      <td th:text="${account.acType == 0} ? '人民币账户' : '美元账户'">账户类型</td>
+      <td th:text="${account.acType == 0} ? ${account.RMBIncome} : ${account.dollarIncome}">账户类型</td>
+      <td>
+        <button onclick="showModal2()">Update</button>
+
+      </td>
+    </tr>
+
+  </table>
+
+  <!-- 更多账户信息 -->
+</div>
+<div id="myModal1" style="display:none;">
+<form id="updateForm">
+  <label for="oldAccount">Old Account:</label>
+  <input type="text" id="oldAccount" name="oldAccount">
+  <br>
+  <br>
+  <label for="newAccount">New Account:</label>
+  <input type="text" id="newAccount" name="newAccount">
+  <br>
+  <label for="type1">Type:</label>
+  <select id="type1" name="type">
+    <option value="1">人民币账户</option>
+    <option value="2">美元账户</option>
+  </select>
+  <br>
+  <button type="submit">Submit</button>
+</form>
+
+
+</div>
+<div id="myModal" style="display:none;">
+  <form id="accountForm">
+
+    <label for="number">Number:</label>
+    <input type="text" id="number" name="number" required>
+    <br>
+    <label for="type">Type:</label>
+    <select id="type" name="type">
+      <option value=1>美元</option>
+      <option value=0>人民币</option>
+    </select>
+    <br>
+
+    <button type="submit">Confirm</button>
+  </form>
+</div>
+
+<script>
+  document.getElementById("updateForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var acType = document.getElementById("type1").value;
+    var newNumber = document.getElementById("newAccount").value;
+    var oldNumber = document.getElementById("oldAccount").value;
+    var bindBody = {
+      oldNumber: oldNumber,
+      newNumber: newNumber,
+      acType: acType
+    };
+    fetch('/accounts/update_account', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bindBody)
+    })
+            .then(response => response.json())
+            .then(data => {
+              // 处理响应数据
+              if(data.code == 200){
+                // 1秒后跳转到index页面
+                window.location.reload();
+
+              }else{
+                alert("bind failed");
+              }
+
+            })
+            .catch(error => {
+              // 处理错误
+              console.error('Error:', error);
+            });
+  });
+  function showModal() {
+    document.getElementById('myModal').style.display = 'block';
+  }
+  function showModal2() {
+    document.getElementById('myModal1').style.display = 'block';
+  }
+  document.getElementById("accountForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var acType = document.getElementById("type").value;
+    var newNumber = document.getElementById("number").value;
+    var bindBody = {
+
+      newNumber: newNumber,
+      acType: acType
+    };
+    fetch('/accounts/bind_account', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bindBody)
+    })
+            .then(response => response.json())
+            .then(data => {
+              // 处理响应数据
+              if(data.code == 200){
+                // 1秒后跳转到index页面
+                window.location.reload();
+
+              }else{
+                alert("bind failed");
+              }
+
+            })
+            .catch(error => {
+              // 处理错误
+              console.error('Error:', error);
+            });
+  });
+</script>
+<!-- 更多账户信息 -->
+</div>
+
+<div id="si">
+  <h2>Seller Information</h2>
+  <button onclick="showModal1()">Add Account</button>
+  <table>
+    <tr>
+      <th>店铺名称</th>
+      <th>更新</th>
+      <th>详情</th>
+    </tr>
+
+    <tr th:each="seller : ${sellers}">
+
+      <td th:text="${seller.pName}" id="sname">名称</td>
+      <td>
+        <button onclick="showModal3()">Update</button>
+
+      </td>
+      <td>
+        <button  id="detail">详情</button>
+
+      </td>
+    </tr>
+  </table>
+  <!-- 更多店铺信息 -->
+</div>
+<div id="sellerModal" style="display:none;">
+  <form id="sellerForm">
+
+    <label for="name">name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <button type="submit">Confirm</button>
+  </form>
+</div>
+<div id="myModal3" style="display:none;">
+  <form id="updateSellerForm">
+
+    <label for="name">oldname:</label>
+    <input type="text" id="oldName" name="oldNname" required>
+    <label for="name">newname:</label>
+    <input type="text" id="newName" name="newNname" required>
+    <button type="submit">Confirm</button>
+  </form>
+</div>
+<script >
+  /*<![CDATA[*/
+  function goToBillPage() {
+    document.getElementById("si").addEventListener("detail", function(event) {
+
+      var name = document.getElementById("sname").value;
+      var url = '/bill?pName='+encodeURIComponent(name);
+      window.location.href = url;
+    });
+  }
+  /*]]>*/
+</script>
+<script >
+  function showModal1() {
+    document.getElementById('sellerModal').style.display = 'block';
+  }
+  function showModal3() {
+    document.getElementById('myModal3').style.display = 'block';
+  }
+
+
+  document.getElementById("sellerForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var name = document.getElementById("name").value;
+    var bindSellerBody = {
+
+      newName: name
+    };
+    fetch('/sellers/bind_seller', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bindSellerBody)
+    })
+            .then(response => response.json())
+            .then(data => {
+              // 处理响应数据
+              if(data.code == 200){
+                // 1秒后跳转到index页面
+                window.location.reload();
+
+              }else{
+                alert("bind failed");
+              }
+
+            })
+            .catch(error => {
+              // 处理错误
+              console.error('Error:', error);
+            });
+  });
+  document.getElementById("updateSellerForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var oldName = document.getElementById("oldName").value;
+    var newName = document.getElementById("newName").value;
+    var bindSellerBody = {
+      oldName:oldName,
+      newName: newName
+    };
+    fetch('/sellers/update_seller', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bindSellerBody)
+    })
+            .then(response => response.json())
+            .then(data => {
+              // 处理响应数据
+              if(data.code == 200){
+                // 1秒后跳转到index页面
+                window.location.reload();
+
+              }else{
+                alert("update failed");
+              }
+
+            })
+            .catch(error => {
+              // 处理错误
+              console.error('Error:', error);
+            });
+  });
+</script>
+<!-- 更多账户信息 -->
+</div>
+</body>
+</html>

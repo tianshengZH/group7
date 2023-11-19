@@ -22,10 +22,7 @@ public class AccountService {
     }
     public boolean updateAccount(BindBody bindBody){
 
-        Accounts accounts =accountsDao.getOneAccount(bindBody.getUserId(),bindBody.getOldNumber(),bindBody.getAcType());
-        if(accounts == null){
-            return false;
-        }
+
       //  bindBody.setUserId(users.getUserid());
         accountsDao.updateAccountNumber(bindBody);
         accountsDao.updateAccountType(bindBody);
@@ -46,13 +43,18 @@ public class AccountService {
         Accounts accounts =accountsDao.getOneAccount(bindBody.getUserId(),bindBody.getOldNumber(),bindBody.getAcType());
         return accounts;
     }
+    public Accounts getAccountsByUserAndType(int uid,int type){
+
+        Accounts accounts =accountsDao.getAccountByUserAndType(uid,type);
+        return accounts;
+    }
     public Accounts getAccountBynumber(String number){
 
         Accounts accounts =accountsDao.getAccountsByNumber(number);
         return accounts;
     }
-    public ArrayList<Accounts> getAllAccounts(BindBody bindBody){
-        ArrayList<Accounts> accounts =accountsDao.getAllAccountsById(bindBody.getUserId());
+    public ArrayList<Accounts> getAllAccounts(int id){
+        ArrayList<Accounts> accounts =accountsDao.getAllAccountsById(id);
         return accounts;
     }
 

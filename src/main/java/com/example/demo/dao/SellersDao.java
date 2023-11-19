@@ -17,10 +17,12 @@ public interface SellersDao {
     public Sellers getSellerByName(@Param("userId")int userId,@Param("pName") String pName);
     @Select("select  * from sellers where userId = #{userId} and status = 0")
     public ArrayList<Sellers> getAllSellersById(@Param("userId") int userId);
-    @Update("Update sellers set pname = #{newName} where userId = #{userId}")
-    public Sellers updateSellerName(BindSellerBody bindSellerBody);
+    @Select("select  * from sellers where userId = #{userId} and status = 0 and pName =#{pName}")
+    public int getPidByName(@Param("userId") int userId,@Param("pName") String pName);
+    @Update("Update sellers set pname = #{newName} where userId = #{userId} and pname=#{oldName}")
+    public void updateSellerName(BindSellerBody bindSellerBody);
     @Update("Update sellers set status = 1 where userId = #{userId} and pname = #{newName}")
-    public Sellers deleteSeller(BindSellerBody bindSellerBody);
+    public void deleteSeller(BindSellerBody bindSellerBody);
 
 
 }

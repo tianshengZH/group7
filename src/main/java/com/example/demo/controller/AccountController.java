@@ -61,11 +61,11 @@ public class AccountController {
         return Result.success(true);
     }
     @RequestMapping("/get_accounts")
-    public Result<ArrayList<Accounts>> getAccounts(HttpServletRequest request,@RequestBody BindBody bindBody){
+    public Result<ArrayList<Accounts>> getAccounts(HttpServletRequest request){
         WebUtil webUtil = new WebUtil();
         int uid =Integer.parseInt(webUtil.getUserIdFromCookies(request));
-        bindBody.setUserId(uid);
-        ArrayList<Accounts> accounts =accountService.getAllAccounts(bindBody);
+
+        ArrayList<Accounts> accounts =accountService.getAllAccounts(uid);
         return Result.success(accounts);
     }
 }

@@ -13,6 +13,7 @@ public interface BillsDao {
     public ArrayList<Bills> getAllBills(@Param("pid") int pid);
     @Select("select * from bills where bid = #{bid}")
     public Bills getBills(@Param("bid") int bid);
+
     @Update("update bills set billstatus = 1 where bid = #{bid}")
     public  void updateStatus(@Param("bid") int bid);
 

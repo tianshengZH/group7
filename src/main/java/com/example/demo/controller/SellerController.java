@@ -15,7 +15,7 @@ import jakarta.servlet.http.*;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/seller")
+@RequestMapping("/sellers")
 public class SellerController {
     @Autowired
     SellerService sellerService;
@@ -52,11 +52,11 @@ public class SellerController {
         return Result.success(true);
     }
     @RequestMapping("/get_sellers")
-    public Result<ArrayList<Sellers>> getSellers(HttpServletRequest request,@RequestBody BindSellerBody bindSellerBody){
+    public Result<ArrayList<Sellers>> getSellers(HttpServletRequest request){
         WebUtil webUtil = new WebUtil();
         String id = webUtil.getUserIdFromCookies(request);
-        bindSellerBody.setUserId(Integer.parseInt(id));
-        ArrayList<Sellers> sellers =sellerService.getAllSellers(bindSellerBody);
+        //bindSellerBody.setUserId(Integer.parseInt(id));
+        ArrayList<Sellers> sellers =sellerService.getAllSellers(Integer.valueOf(id));
         return Result.success(sellers);
     }
 }
