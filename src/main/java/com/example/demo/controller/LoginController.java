@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.result.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import com.example.demo.domin.*;
 import com.example.demo.util.*;
 @RestController

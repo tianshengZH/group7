@@ -2,11 +2,8 @@ package com.example.demo.util;
 
 import com.example.demo.domin.Users;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import jakarta.servlet.http.*;
 public class WebUtil {
     //session
     public void addUserToSession(HttpSession session, Users users) {

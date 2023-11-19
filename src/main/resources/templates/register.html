@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <!-- 可以添加CSS和JavaScript的引用 -->
+</head>
+<body>
+<h1>Register</h1>
+<form id="registerForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <br>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <br>
+    <button type="submit">Register</button>
+</form>
+
+<script>
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var email = document.getElementById("email").value;
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        var registerBody = {
+            email: email,
+            userName: username,
+            passwords: password
+        };
+
+        fetch('/index/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(registerBody)
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 处理响应数据
+                if(data.code == 200){
+                    alert("Registration Successful!");
+
+                    // 1秒后跳转到index页面
+                    setTimeout(function() {
+                        window.location.href = '/index';
+                    }, 1000);
+
+                }else{
+                    alert("Registration Failed!");
+                }
+
+               // console.log(data);
+            })
+            .catch(error => {
+                // 处理错误
+                console.error('Error:', error);
+            });
+    });
+</script>
+</body>
+</html>

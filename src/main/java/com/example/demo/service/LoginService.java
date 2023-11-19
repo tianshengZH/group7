@@ -32,6 +32,8 @@ public class LoginService {
         if(users!=null){
             return false;
         }
+        String ps = MD5.MD5encoder(registerBody.getPasswords());
+        registerBody.setPasswords(ps);
         userService.insertIntoUsers(registerBody.getEmail(),registerBody.getUserName(),registerBody.getPasswords());
         return true;
     }

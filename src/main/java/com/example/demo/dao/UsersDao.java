@@ -15,5 +15,5 @@ public interface UsersDao {
     @Select("SELECT * FROM users WHERE userid = #{uid}")
     public Users getById(@Param("uid") int uid);
     @Insert("Insert into users(email,username,passwords) values(#{email},#{username},#{passwords}) ")
-    public Users insertIntoUsers(@Param("email") String email,@Param("userName") String userName,@Param("passwords") String passwords);
+    public int insertIntoUsers(@Param("email") String email,@Param("username") String username,@Param("passwords") String passwords);
 }

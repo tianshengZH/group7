@@ -15,7 +15,7 @@ public class UserService {
     public Users getById(int uid){
         return usersDao.getById(uid);
     }
-    public Users insertIntoUsers(String email,String userName,String passwords){
+    public int insertIntoUsers(String email,String userName,String passwords){
         return usersDao.insertIntoUsers(email,userName,passwords);
     }
 }

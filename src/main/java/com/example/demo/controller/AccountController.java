@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domin.*;
 import com.example.demo.result.*;
 import com.example.demo.util.*;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.*;
 import java.util.ArrayList;
 
 @RestController
