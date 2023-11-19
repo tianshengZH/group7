@@ -2,7 +2,9 @@ package com.example.demo.controller;
 
 
 import com.example.demo.result.Result;
+import com.example.demo.util.WebUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +37,7 @@ public class WebController {
         return "index"; // 返回index页面的视图名称
     }
     @GetMapping("/bill")
-    public String toBillPage() {
+    public String toBillPage(Model model, HttpServletResponse httpServletResponse, HttpServletRequest request) {
 
         return "bill"; // 返回index页面的视图名称
     }

@@ -5,6 +5,7 @@
 </head>
 <body>
 <h1>Bill Page</h1>
+
 <button onclick="showAddBillForm()">添加账单</button>
 
 <!-- 隐藏的添加账单表单 -->
@@ -84,7 +85,7 @@
         // 解析URL参数
 
         // 调用后端接口
-        fetch('/bills/get_bills?pName='+'test1')
+        fetch('/bills/get_bills')
             .then(response => response.json())
             .then(data => {
                 // 处理返回的数据
@@ -124,7 +125,6 @@
             },
             body: JSON.stringify({
                 dollarIncome: income,
-                pName : "test1"
             })
         })
             .then(response => response.json())

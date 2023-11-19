@@ -155,29 +155,35 @@
 <!-- 更多账户信息 -->
 </div>
 
-<div id="si">
+<div >
   <h2>Seller Information</h2>
   <button onclick="showModal1()">Add Account</button>
+
   <table>
     <tr>
       <th>店铺名称</th>
       <th>更新</th>
-      <th>详情</th>
+
     </tr>
 
-    <tr th:each="seller : ${sellers}">
+    <tr th:each="seller, iterStat : ${sellers}">
 
-      <td th:text="${seller.pName}" id="sname">名称</td>
+      <td th:text="${seller.pName}" id="sname' + ${iterStat.index}">名称</td>
       <td>
         <button onclick="showModal3()">Update</button>
 
       </td>
-      <td>
-        <button  id="detail">详情</button>
 
-      </td>
     </tr>
   </table>
+
+  <form id="si">
+
+    <label for="name">店铺名称:</label>
+    <input type="text" id="sname" name="sname" required>
+
+    <button type="submit">Confirm</button>
+  </form>
   <!-- 更多店铺信息 -->
 </div>
 <div id="sellerModal" style="display:none;">
@@ -201,14 +207,40 @@
 </div>
 <script >
   /*<![CDATA[*/
-  function goToBillPage() {
-    document.getElementById("si").addEventListener("detail", function(event) {
 
-      var name = document.getElementById("sname").value;
-      var url = '/bill?pName='+encodeURIComponent(name);
-      window.location.href = url;
+    document.getElementById("si").addEventListener("submit", function(event) {
+
+      event.preventDefault();
+      var pName = document.getElementById("sname").value;
+      var bindSellerBody={
+        newName: pName
+      }
+      console.log(pName);
+      fetch('/bills/add_pName', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bindSellerBody)
+      })
+              .then(response => response.json())
+              .then(data => {
+                // 处理响应数据
+                if(data.code == 200){
+                  // 1秒后跳转到index页面
+                  window.location.href ="/bill";
+
+                }else{
+                  alert("bind failed");
+                }
+
+              })
+              .catch(error => {
+                // 处理错误
+                console.error('Error:', error);
+              });
     });
-  }
+
   /*]]>*/
 </script>
 <script >

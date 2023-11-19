@@ -33,24 +33,31 @@ public class BillController {
     public Result<Boolean> addBills(HttpServletRequest request, @RequestBody BillsReceive billsReceive){
         WebUtil webUtil = new WebUtil();
         String id = webUtil.getUserIdFromCookies(request);
+        String pName = webUtil.getpNameFromCookies(request);
         billsReceive.setUid(Integer.parseInt(id));
+        billsReceive.setpName(pName);
         billsService.insertBills(billsReceive);
         return Result.success(true);
     }
     @RequestMapping("/get_bills")
     @ResponseBody
 
-    public Result<ArrayList<Bills>> getBills( HttpServletRequest request, @RequestParam String pName){
+    public Result<ArrayList<Bills>> getBills( HttpServletRequest request){
         WebUtil webUtil = new WebUtil();
         String id = webUtil.getUserIdFromCookies(request);
-
+        String pName = webUtil.getpNameFromCookies(request);
         int pid = sellerService.getPidByName(Integer.parseInt(id),pName);
 
         ArrayList<Bills> bills = billsService.getAllBillsByPid(pid);
 
         return Result.success(bills);
     }
-
+    @RequestMapping("add_pName")
+    public Result<Boolean> addPname(HttpServletResponse httpServletResponse,@RequestBody BindSellerBody bindSellerBody){
+        WebUtil webUtil = new WebUtil();
+        webUtil.addPNameToCookie(httpServletResponse ,bindSellerBody.getNewName());
+        return Result.success(true);
+    }
     @RequestMapping("/withdraw_moneyList")
     public Result<WithdrawMoneyBody> withdrawMoneyList(HttpServletRequest request,@RequestBody WithdrawBodyList withdrawBodyList){
         WebUtil webUtil = new WebUtil();
